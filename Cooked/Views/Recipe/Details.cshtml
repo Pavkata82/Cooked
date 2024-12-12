@@ -1,0 +1,244 @@
+﻿@model Cooked.Models.Recipe
+
+@{
+    ViewData["Title"] = "Recipe Details";
+}
+
+<style>
+    /* Ensure the carousel has a fixed width and height */
+    .carousel {
+        max-width: 600px; /* Set a maximum width for the carousel */
+        margin: 0 auto; /* Center the carousel */
+    }
+
+    .carousel-inner {
+        position: relative; /* Make sure the carousel items are contained inside */
+        width: 100%;
+        height: 400px; /* Fixed height for consistency */
+        overflow: hidden; /* Hide overflow from images */
+    }
+
+    .carousel-item {
+        width: 100%;
+        height: 100%; /* Make sure items take up the full height of the carousel */
+    }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%; /* Ensure the images fill the container */
+            object-fit: cover; /* Make sure images are not distorted */
+        }
+
+    .recipe-details {
+        margin-bottom: 20px;
+    }
+
+    .review-card {
+        margin-bottom: 15px;
+    }
+
+    .review-card {
+        background-color: #f8f9fa; /* Lighter background color */
+        border: 1px solid #ddd; /* Slight border to separate it */
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+
+    .review-card h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .review-card .card-text {
+        font-size: 0.95rem;
+    }
+
+    .review-card .text-muted {
+        font-size: 0.85rem;
+    }
+
+    .review-card .bi-star {
+        color: #ccc; /* Empty stars */
+    }
+
+    .review-card .bi-star-fill {
+        color: #f39c12; /* Gold color for filled stars */
+    }
+
+</style>
+
+<div class="container">
+    <!-- Back Button at the Top Left -->
+    <div class="my-4 d-flex justify-content-between">
+        <a asp-controller="Recipe" asp-action="Index" class="btn btn-secondary">Назад към каталога</a>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <form asp-controller="Admin" asp-action="DeleteRecipe" method="post" onsubmit="return confirm('Наистина ли искате да изтриете тази рецепта?');">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger">Изтрий</button>
+            </form>
+        }
+    </div>
+
+    <!-- Display the Creator's Info -->
+    @if (Model.CreatedByUserId != null)
+    {
+        var user = Model.CreatedByUser;
+
+        <!-- Assuming you are passing the user details along with the recipe -->
+
+        <a href="@Url.Action("Profile", "Account", new { id = Model.CreatedByUser.Id })" class="d-flex align-items-center" style="text-decoration: none;">
+            <img src="@Url.Content(user.ImageUrl)" alt="User Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;" />
+            <h5 class="card-title mb-0">@user.FirstName @user.LastName</h5>
+        </a>
+
+    }
+
+    <h1 class="text-center mb-4">@Model.Title</h1>
+
+    <!-- Carousel for Recipe Images -->
+    @if (Model.RecipeImages.Any())
+    {
+        <div id="recipeImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var (image, index) in Model.RecipeImages.Select((image, i) => (image, i)))
+                {
+                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                        <img src="@Url.Content(image.ImageUrl)" class="d-block w-100" alt="@Model.Title" />
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#recipeImageCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#recipeImageCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <strong>Няма налични снимки за тази рецепта.</strong>
+        </div>
+    }
+
+    <!-- Recipe Details -->
+    <div class="bg-light bg-gradient rounded mb-2 p-2">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Описание</h4>
+                <p>@Model.Description</p>
+            </div>
+
+            <div class="col-md-6">
+                <h4>Инструкции</h4>
+                <div class="recipe-details">
+                    @foreach (var step in Model.Instructions.Split('\n'))
+                    {
+                        <p>@step</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Съставки</h4>
+                <div class="recipe-details">
+                    @foreach (var ingredient in Model.IngredientsText.Split('\n'))
+                    {
+                        <p>@ingredient</p>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4>Категория</h4>
+                <p>@Model.Category.Name</p>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Reviews Section (Below Recipe Details) -->
+    <div class="reviews-section">
+        <h3>Отзиви</h3>
+
+        @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+        {
+            <div class="card review-card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3 justify-content-between">
+                        <a href="@Url.Action("Profile", "Account", new { id = review.User.Id })" class="d-flex align-items-center" style="text-decoration: none;">
+                            <img src="@Url.Content(review.User.ImageUrl)" alt="User Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;" />
+                            <h5 class="card-title mb-0">@review.User.FirstName @review.User.LastName</h5>
+                        </a>
+                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-controller="Admin" asp-action="DeleteReview" method="post" onsubmit="return confirm('Наистина ли искате да изтриете този отзив?');">
+                                <input type="hidden" name="id" value="@review.Id" />
+                                <button type="submit" class="btn btn-danger">Изтрий</button>
+                            </form>
+                        }
+                    </div>
+                    <p class="card-text">@review.Content</p>
+                    <p class="card-text">
+                        <span class="stars">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                if (i <= review.Rating)
+                                {
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star text-muted"></i>
+                                }
+                            }
+                        </span>
+                        <span class="ml-2">@review.Rating / 5</span>
+                    </p>
+                    <p class="card-text"><small class="text-muted">Създадено на @review.CreatedAt.ToString("MMMM dd, yyyy")</small></p>
+                </div>
+            </div>
+        }
+
+        @if (!Model.Reviews.Any())
+        {
+            <div class="alert alert-info">Все още няма отзиви. Бъди първия, който да напише отзив!</div>
+        }
+
+        @* Add a form to submit a new review *@
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-action="AddReview" method="post">
+                <div class="form-group">
+                    <label for="Content">Вашият отзив</label>
+                    <textarea class="form-control" id="Content" name="Content" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="Rating">Оценка</label>
+                    <select class="form-control" id="Rating" name="Rating" required>
+                        <option value="">Изберете оценка</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <input type="hidden" name="RecipeId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary mt-3">Добави отзив</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-info">Трябва да сте влезли, за да добавяте отзиви.</div>
+        }
+    </div>

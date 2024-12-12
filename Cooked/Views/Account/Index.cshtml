@@ -1,0 +1,71 @@
+﻿@using Cooked.Models.ViewModels
+@model AccountViewModel
+
+<h2 class="text-center">Преглед на акаунта</h2>
+
+<div class="d-flex justify-content-center mb-4">
+    <div class="text-center">
+        <!-- User Profile Image -->
+        @if (!string.IsNullOrEmpty(Model.User.ImageUrl))
+        {
+            <img src="@Url.Content(Model.User.ImageUrl)" class="rounded-circle" alt="@Model.User.FirstName @Model.User.LastName" width="150" height="150" />
+        }
+        else
+        {
+            <img src="https://via.placeholder.com/150x150?text=No+Image" class="rounded-circle" alt="Няма налична снимка" width="150" height="150" />
+        }
+
+        <!-- User Information -->
+        <h3>@Model.User.FirstName @Model.User.LastName</h3>
+        <p class="mb-3">@Model.User.Email</p>
+
+        <!-- Delete Account Form -->
+        <form method="post" action="@Url.Action("DeleteAccount")" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете вашия акаунт? Вашите рецепти ще бъдат изтрити също!')">
+            <button type="submit" class="btn btn-danger mt-4">Изтрий своя акаунт</button>
+        </form>
+    </div>
+</div>
+
+
+<h3>Твоите рецепти</h3>
+
+<div class="row">
+    @foreach (var recipe in Model.Recipes)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                @if (recipe.RecipeImages != null && recipe.RecipeImages.Any() && !string.IsNullOrEmpty(recipe.RecipeImages.First().ImageUrl))
+                {
+                    <img src="@Url.Content(recipe.RecipeImages.First().ImageUrl)" class="card-img-top thumbnail-image" style="height: 200px; object-fit: cover;"  alt="@recipe.Title" />
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top thumbnail-image" style="height: 200px; object-fit: cover;" alt="Няма налични снимки" />
+                }
+
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Title</h5>
+                    <p class="card-text text-truncate" title="@recipe.Description">
+                        @(!string.IsNullOrEmpty(recipe.Description) ? recipe.Description : "Няма описание")
+                    </p>
+                    <a asp-controller="Recipe" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary mb-3">Виж Детайли</a>
+
+                    <!-- Edit recipe -->
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a asp-action="Edit" asp-controller="Recipe" asp-route-id="@recipe.Id" class="btn btn-warning">Редактирай</a>
+                        <form method="post" asp-action="DeleteRecipe" asp-controller="Recipe" asp-route-id="@recipe.Id" onsubmit="return confirm('Сигурни ли сте?')">
+                            <button type="submit" class="btn btn-danger">Изтрий</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Recipes.Any())
+{
+    <p class="text-muted text-center">Все още нямаш твой рецепти</p>
+}
+

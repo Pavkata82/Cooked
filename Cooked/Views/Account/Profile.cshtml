@@ -1,0 +1,58 @@
+﻿@model Cooked.Models.ApplicationUser
+
+<h1 class="text-center">@Model.FirstName @Model.LastName</h1>
+
+<div class="d-flex justify-content-center mb-4">
+    <div class="text-center">
+        <!-- User Profile Image -->
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Url.Content(Model.ImageUrl)" class="rounded-circle" alt="@Model.FirstName @Model.LastName" width="150" height="150" />
+        }
+        else
+        {
+            <img src="https://via.placeholder.com/150x150?text=No+Image" class="rounded-circle" alt="Няма изображение" width="150" height="150" />
+        }
+
+        <!-- User Information -->
+        <h3>@Model.FirstName @Model.LastName</h3>
+        <p>@Model.Email</p>
+    </div>
+</div>
+
+<h2 class="text-center">Рецепти от @Model.FirstName</h2>
+
+<div class="row">
+    @foreach (var recipe in Model.Recipes)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm" style="min-height: 400px;">
+                <!-- Recipe Image -->
+                @if (recipe.RecipeImages != null && recipe.RecipeImages.Any() && !string.IsNullOrEmpty(recipe.RecipeImages.First().ImageUrl))
+                {
+                    <img src="@Url.Content(recipe.RecipeImages.First().ImageUrl)" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@recipe.Title" />
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" style="height: 200px; object-fit: cover;" alt="No Image" />
+                }
+
+                <!-- Recipe Information -->
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title text-truncate" title="@recipe.Title">@recipe.Title</h5>
+                        <p class="card-text text-truncate" title="@recipe.Description">
+                            @(!string.IsNullOrEmpty(recipe.Description) ? recipe.Description : "Няма описание")
+                        </p>
+                    </div>
+                    <a href="@Url.Action("Details", "Recipe", new { id = recipe.Id })" class="btn btn-primary mt-3">Виж детайли</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Recipes.Any())
+{
+    <p class="text-muted text-center">Все още няма рецепти.</p>
+}

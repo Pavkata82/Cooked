@@ -1,0 +1,65 @@
+﻿.image-container {
+    text-align: center;
+}
+
+    .image-container img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .image-container .delete-btn {
+        border-radius: 50%;
+    }
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+    .form-row > .form-group {
+        flex: 1 1 calc(50% - 15px);
+    }
+
+.form-group textarea {
+    min-height: 100px;
+}
+
+.custom-file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+    .custom-file-label:hover {
+        background-color: #0056b3;
+    }
+
+.custom-file-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.image-preview-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 5px;
+}

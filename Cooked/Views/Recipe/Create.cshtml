@@ -1,0 +1,102 @@
+﻿@model Cooked.Models.ViewModels.RecipeCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Recipe";
+}
+
+<style>
+    #imagePreview .image-container {
+    width: 150px;
+    height: 150px;
+    margin: 5px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#imagePreview .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps the aspect ratio and fills the container */
+}
+
+</style>
+
+<h1 class="my-4 text-center">Създай рецепта</h1>
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Създай нова рецепта</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <!-- Recipe Title -->
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="form-label">Заглавие</label>
+                    <input asp-for="Title" class="form-control" placeholder="Въведете заглавието на рецептата" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <!-- Recipe Description -->
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label">Описание</label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Въведете кратко описание на рецептата"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Recipe Instructions -->
+                <div class="form-group mb-3">
+                    <label asp-for="Instructions" class="form-label">Инструкции</label>
+                    <textarea asp-for="Instructions" class="form-control" placeholder="Инструкции стъпка-по-стъпка"></textarea>
+                    <span asp-validation-for="Instructions" class="text-danger"></span>
+                </div>
+
+                <!-- Ingredients Text -->
+                <div class="form-group mb-3">
+                    <label asp-for="IngredientsText" class="form-label">Съставки</label>
+                    <textarea asp-for="IngredientsText" class="form-control" placeholder="Напишете всички съставки"></textarea>
+                    <span asp-validation-for="IngredientsText" class="text-danger"></span>
+                </div>
+
+                <!-- Category Selection -->
+                <div class="form-group mb-3">
+                    <label asp-for="CategoryId" class="form-label">Категория</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                        <option value="">Изберете категория</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <!-- Upload Images with Preview -->
+                <div class="form-group mb-4">
+                    <label class="form-label">Качете изображение (Изисква се поне едно изображение)</label>
+                    <input type="file" name="Images" accept="image/*" multiple class="form-control-file" id="imageUpload" />
+                    <div id="imagePreview" class="d-flex flex-wrap mt-3"></div>
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Създай рецептата</button>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Отмени</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Validation Summary -->
+<div class="text-center mt-4">
+    <span asp-validation-summary="All" class="text-danger"></span>
+</div>
+
+<script src="~/js/ImagePreview.js"></script>
+
+
+

@@ -1,0 +1,39 @@
+﻿<h1 class="text-center my-4">Админ Dashboard</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Управление не Рецепти</h5>
+                    <p class="card-text">Разглеждане и изтриване на рецепти.</p>
+                    <a asp-controller="Admin" asp-action="Recipes" class="btn btn-primary">
+                        <i class="bi bi-book"></i> Към рецепти
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Управление на Акаунти</h5>
+                    <p class="card-text">Разглеждане и изтриване на акаунти.</p>
+                    <a asp-controller="Admin" asp-action="Users" class="btn btn-primary">
+                        <i class="bi bi-people"></i> Към Акаунти
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Управлявай Отзиви</h5>
+                    <p class="card-text">Разглеждай и изтривай отзиви.</p>
+                    <a asp-controller="Admin" asp-action="Reviews" class="btn btn-primary">
+                        <i class="bi bi-chat-text"></i> Към Отзиви
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

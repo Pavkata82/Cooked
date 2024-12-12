@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Recipe>
+<h1 class="text-center my-4">Управлявай Рецепти</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var recipe in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    @if (recipe.RecipeImages != null && recipe.RecipeImages.Any() && !string.IsNullOrEmpty(recipe.RecipeImages.First().ImageUrl))
+                    {
+                        <img src="@Url.Content(recipe.RecipeImages.First().ImageUrl)" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@recipe.Title">
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" style="height: 200px; object-fit: cover;" alt="No Image">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@recipe.Title</h5>
+                        <p class="card-text text-truncate" title="@recipe.Description">
+                            @(!string.IsNullOrEmpty(recipe.Description) ? recipe.Description : "Няма описание.")
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Details", "Recipe", new { id = recipe.Id })" class="btn btn-primary btn-sm">Виж</a>
+                            <form asp-action="DeleteRecipe" asp-route-id="@recipe.Id" method="post">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Сигурни ли сте?')">
+                                    <i class="bi bi-trash"></i> Изтрий
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

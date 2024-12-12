@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Начало";
+}
+
+<style>
+    #title{
+        font-weight: 600;
+        color: grey;
+    }
+</style>
+
+<div class="container text-center mt-5">
+    <!-- Header Section -->
+    <h1 class="mb-4 display-4">Добре дошли в <span id="title">Cooked</span></h1>
+    <p class="text-muted mb-4">Открийте любимите си рецепти или опитайте нещо ново днес!</p>
+
+    <!-- Search Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-controller="Recipe" asp-action="Index" method="get" class="input-group">
+                <input type="text"
+                       name="searchQuery"
+                       placeholder="Търсене на рецепти..."
+                       class="form-control border-primary"
+                       value="@ViewData["SearchQuery"]"
+                       aria-label="Търсене на рецепти" />
+                <button type="submit" class="btn btn-primary">Търсене</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Features Section -->
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="bi bi-book display-3 text-success"></i>
+            <h5 class="mt-3">Лесни за Следване Рецепти</h5>
+            <p class="text-muted">Стъпка по стъпка инструкции за перфектни ястия.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-heart-fill display-3 text-danger"></i>
+            <h5 class="mt-3">Любими на Общността</h5>
+            <p class="text-muted">Намерете рецепти, обичани от нашите потребители.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-lightbulb-fill display-3 text-warning"></i>
+            <h5 class="mt-3">Вдъхновение за Всеки</h5>
+            <p class="text-muted">Открийте нови идеи за вашата следваща вечеря.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container text-center mt-5">
+    <a asp-controller="Recipe" asp-action="Index" class="btn btn-outline-primary btn-lg">
+        Разгледайте Всички Рецепти
+    </a>
+</div>

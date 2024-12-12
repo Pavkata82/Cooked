@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
+    <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Регистрация</h2>
+            <form asp-action="Register" method="post" enctype="multipart/form-data" class="mt-4">
+                <div class="mb-3">
+                    <label for="FirstName" class="form-label">Име</label>
+                    <input type="text" name="FirstName" class="form-control" placeholder="Въведи името си" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="LastName" class="form-label">Фамилия</label>
+                    <input type="text" name="LastName" class="form-control" placeholder="Въведи фамилията си" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Имейл</label>
+                    <input type="email" name="email" class="form-control" placeholder="Въведи имейла си" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Password" class="form-label">Парола</label>
+                    <input type="password" name="password" class="form-control" placeholder="Въведи паролата си" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="profileImage" class="form-label">Снимка на профила</label>
+                    <input type="file" name="profileImage" class="form-control" />
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary w-100">Регистрирай се</button>
+                </div>
+            </form>
+
+            <div class="mt-4 text-center">
+                <p>Вече имате акаунт? <a href="/Account/Login">Влезте тук</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>

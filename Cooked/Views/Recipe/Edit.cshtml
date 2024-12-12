@@ -1,0 +1,145 @@
+﻿@model Cooked.Models.ViewModels.RecipeEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Recipe";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/EditRecipe.css" />
+}
+
+
+<h1 class="my-4 text-center">Редактирай рецепта</h1>
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Редактирай рецептата</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Form Row for Title and Description -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label">Заглавие</label>
+                        <input asp-for="Title" class="form-control" placeholder="Въведете заглавието на рецептата" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label">Описание</label>
+                        <textarea asp-for="Description" class="form-control" placeholder="Въведете кратко описание на рецептата"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Form Row for Instructions and Ingredients -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Instructions" class="form-label">Инструкции</label>
+                        <textarea asp-for="Instructions" class="form-control" placeholder="Инструкции стъпка-по-стъпка"></textarea>
+                        <span asp-validation-for="Instructions" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IngredientsText" class="form-label">Съставки</label>
+                        <textarea asp-for="IngredientsText" class="form-control" placeholder="Напишете всички съставки"></textarea>
+                        <span asp-validation-for="IngredientsText" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Category Selection -->
+                <div class="form-group mb-3">
+                    <label asp-for="CategoryId" class="form-label">Категория</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                        <option value="">Изберете категория</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <!-- Existing Images -->
+                @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+                {
+                    <div class="form-group mb-4">
+                        <label class="form-label">Съществуващи изображения</label>
+                        <div class="d-flex flex-wrap mt-3">
+                            @for (int i = 0; i < Model.ExistingImages.Count; i++)
+                            {
+                                <div class="image-container d-flex flex-column align-items-center">
+                                    <img src="@Model.ExistingImages[i]" alt="Recipe Image" class="img-fluid m-2" />
+                                    <input type="hidden" name="ImagesToDelete" value="@Model.ExistingImages[i]" id="hiddenDelete_@i" disabled />
+                                    <button type="button" class="btn btn-outline-danger delete-btn" data-target="#hiddenDelete_@i">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Upload New Images -->
+                <div class="form-group mb-4">
+                    <label for="imageUpload" class="form-label">Качете нови изображения (ако е необходимо)</label>
+                    <div class="custom-file">
+                        <label for="imageUpload" class="custom-file-label">Изберете файлове</label>
+                        <input type="file" id="imageUpload" class="custom-file-input" name="NewImages" accept="image/*" multiple />
+                    </div>
+                    <div id="imagePreview" class="d-flex flex-wrap mt-3"></div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Запази промените</button>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Отмени</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle Delete Button
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetInputId = this.getAttribute('data-target');
+                const targetInput = document.querySelector(targetInputId);
+
+                if (targetInput) {
+                    targetInput.disabled = !targetInput.disabled;
+
+                    if (!targetInput.disabled) {
+                        this.classList.remove('btn-outline-danger');
+                        this.classList.add('btn-danger');
+                    } else {
+                        this.classList.remove('btn-danger');
+                        this.classList.add('btn-outline-danger');
+                    }
+                }
+            });
+        });
+
+        // Image Preview
+        const imageInput = document.getElementById('imageUpload');
+        const previewContainer = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function () {
+            previewContainer.innerHTML = ''; // Clear previous previews
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('img-thumbnail');
+                    img.style.width = '150px';
+                    img.style.height = '150px';
+                    img.style.objectFit = 'cover';
+                    img.style.margin = '5px';
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    });
+</script>

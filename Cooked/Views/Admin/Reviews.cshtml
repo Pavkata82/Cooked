@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Review>
+<h1 class="text-center my-4">Управлявай Отзиви</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var review in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Рецепта: @review.Recipe.Title</h5>
+                        <p class="card-text">@review.Content</p>
+                        <p><strong>Акаунт:</strong> @review.User.Email</p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-action="DeleteReview" asp-route-id="@review.Id" method="post" class="mt-2">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Сигурни ли сте?')">
+                                    <i class="bi bi-trash"></i> Изтрий
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

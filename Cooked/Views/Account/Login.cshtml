@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
+    <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Влизане</h2>
+            <form asp-action="Login" method="post">
+                <!-- Email Input -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Имейл</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Въведи имейла си" required />
+                </div>
+
+                <!-- Password Input -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">Парола</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Въведи паролата си" required />
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Влизане</button>
+            </form>
+
+            <!-- Additional Links -->
+            <div class="text-center mt-3">
+                <p class="small">
+                    Нямаш акаунт?
+                    <a asp-action="Register" class="text-decoration-none">Регистрация</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

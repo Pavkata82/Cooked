@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Cooked.Models.Recipe>
+@{
+    ViewData["Title"] = "Recipes";
+}
+
+<style>
+    .thumbnail-image {
+        width: 100%; /* Ensure the image fills the container */
+        height: 200px; /* Set a fixed height */
+        object-fit: cover; /* Maintain aspect ratio and fill the container */
+        object-position: center; /* Center the image in case of cropping */
+    }
+
+</style>
+
+<h1 class="my-4 text-center">Каталог</h1>
+
+<!-- Search Form -->
+<div class="mb-4">
+    <form asp-controller="Recipe" asp-action="Index" method="get" class="d-flex">
+        <input type="text" name="searchQuery" placeholder="Търсене на рецепти..." class="form-control me-2" value="@ViewData["SearchQuery"]" />
+        <button type="submit" class="btn btn-primary">Търси</button>
+    </form>
+</div>
+
+<!-- Recipes Section -->
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var recipe in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(recipe.RecipeImages?.FirstOrDefault()?.ImageUrl))
+                    {
+                        <img src="@Url.Content(recipe.RecipeImages.First().ImageUrl)" class="card-img-top thumbnail-image" alt="@recipe.Title" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top thumbnail-image" alt="No image available" />
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@recipe.Title</h5>
+                        <p class="card-text text-truncate" title="@recipe.Description">
+                            @(!string.IsNullOrEmpty(recipe.Description) ? recipe.Description : "Няма описание")
+                        </p>
+                        <a asp-controller="Recipe" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary">Виж Детайли</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted text-center">Няма намерени рецепти. Опитайте да потърсите други!</p>
+}
+
