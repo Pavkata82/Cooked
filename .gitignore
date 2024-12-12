@@ -1,0 +1,36 @@
+# .gitignore for an ASP.NET MVC project
+
+# Ignore Visual Studio files
+.vs/
+.vscode/
+.idea/
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]istPublic/
+bin/
+obj/
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+# Windows Installer files
+*.exe
+# Web API folders
+wwwroot/images/
+# Logs
+*.log
+# OS files
+Thumbs.db
+Desktop.ini
+# JetBrains Rider
+.idea/
